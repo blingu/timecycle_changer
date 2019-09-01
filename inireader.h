@@ -7,8 +7,8 @@
 
 inline char file_exists(const char *path)
 {
-		return GetFileAttributesA(path) != INVALID_FILE_ATTRIBUTES &&
-			!(GetFileAttributesA(path) & FILE_ATTRIBUTE_DIRECTORY);
+	return GetFileAttributesA(path) != INVALID_FILE_ATTRIBUTES &&
+		!(GetFileAttributesA(path) & FILE_ATTRIBUTE_DIRECTORY);
 }
 
 char get_path(char *inibuffer);
