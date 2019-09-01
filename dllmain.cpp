@@ -5,7 +5,7 @@ void(*updateptr)(void);
 
 WRAPPER void timecycle_initialise() { EAXJMP(0x5BBAC0); }
 WRAPPER void timecycle_update() { EAXJMP(0x561760); }
-WRAPPER void AddMessageJumpQ(const char *text, unsigned int time, unsigned short flag, bool bAddToPreviousBrief) { EAXJMP(0x69F1E0); }
+WRAPPER void add_message(char *text, unsigned int time, unsigned short flag, bool bAddToPreviousBrief) { EAXJMP(0x69F1E0); }
 
 struct timecycle_t {
 		int timecycles[9];
@@ -41,9 +41,9 @@ void update()
 		timecycle_update();
 
 		struct timecycle_t timecyc;
-		char current[14];
 		char keystroke = 0x78;
 		char info = 0;
+		static char current[14];
 		static unsigned int index;
 		static bool keystate = false;
 
@@ -67,11 +67,8 @@ void update()
 					snprintf(current, sizeof(current), "timecyc%d.dat", timecyc.timecycles[index]);
 					Patch<const char*>(0x5BBAD9 + 1, current);
 
-					if (info) {
-						char *str = (char *)malloc(14);
-						strcpy(str, current);
-						AddMessageJumpQ(str, 2000, 0, 0);
-					}
+					if (info)
+						add_message(current, 2000, 0, 0);
 
 					timecycle_initialise();
 					index++;
